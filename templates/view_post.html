@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="body">
+	<title>{{ post.title }}</title>
+	{% if post.title %}
+	  <h1>{{ post.title }}</h1>
+	{% endif %}
+	<img src="{{ post.link }}">
+	{% if post.description %}
+	  <p>{{ post.description }}</p>
+	{% endif %}
+</div>
+{% endblock %}

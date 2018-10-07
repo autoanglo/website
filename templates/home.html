@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="body">
+	<title>Welcome to the home page</title>
+	{% for post in data %}
+		{% if post.title %}
+		  <h1>{{ post.title }}</h1>
+		{% endif %}
+		<a href="/post/{{ post.id }}">
+			<img src="{{ post.link }}">
+		</a>
+		{% if post.description %}
+		  <p>{{ post.description }}</p>
+		{% endif %}
+	{% endfor %}
+</div>
+
+{% if pages.previouse_page %}
+<a href="/page/{{ pages.previouse_page }}" rel="next">PREVIOUS</a>
+{% endif %}
+{% if pages.next_page %}
+<a href="/page/{{ pages.next_page }}" rel="next">NEXT</a>
+{% endif %}
+{% endblock %}
