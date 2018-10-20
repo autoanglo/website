@@ -51,7 +51,7 @@ def load_user(userid):
 
             
 data = Data()    
-users = [User(0, "squire", "1")]
+users = []
 
 
 @app.route('/', defaults={'page': 1})

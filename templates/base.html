@@ -1,7 +1,7 @@
 <!doctype html>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='home.css') }}">
 <div class="topnav">
-	<div class="title">Poruboto</div>
+	<div class="title">TitleHere</div>
     {% for item in nav.top %}
    	<a class="{{ 'active' if item.is_active else '' }}" href="{{ item.url }}">{{ item.label }}</a>
     {% endfor %}
