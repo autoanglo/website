@@ -1,6 +1,9 @@
 from flask import Flask
 from flask import render_template, redirect, url_for, request
-from flask.ext.navigation import Navigation
+try:
+    from flask.ext.navigation import Navigation
+except:
+    from flask_navigation import Navigation
 from flask.ext.login import LoginManager, login_user, logout_user, UserMixin, login_required
 from User import User
 from PageManager import PageManager
