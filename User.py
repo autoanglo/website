@@ -1,4 +1,7 @@
-from flask.ext.login import LoginManager, login_user, logout_user, UserMixin, login_required
+try:
+    from flask.ext.login import LoginManager, login_user, logout_user, UserMixin, login_required
+except:
+    from flask_login import LoginManager, login_user, logout_user, UserMixin, login_required
 
 class User(UserMixin):
     def __init__(self, id, username=None, password=None):
