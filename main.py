@@ -5,6 +5,7 @@ from flask.ext.login import LoginManager, login_user, logout_user, UserMixin, lo
 from User import User
 from PageManager import PageManager
 from DatabaseWrapper import Data
+from UsersDatabaseWrapper import UserData
 
 import json
 
@@ -50,11 +51,16 @@ def load_user(userid):
 
 
             
-data = Data()    
-users = []
-
+data = Data()
+user_data = UserData()
+#users = [User("1", "Me", "Me")]
+page_size = 5
 
 @app.route('/', defaults={'page': 1})
+def main():
+    return redirect("https://www.etsy.com/shop/EmilyLandBasics")
+
+
 @app.route('/page/<int:page>')
 def home(page): 
     lower_index = page_size * page - page_size
@@ -81,6 +87,9 @@ def view_post(post_id):
     
     return render_template("view_post.html", post=data.get_post_by_id(post_id))
 
+
+##### ADMIN PAGES #####
+
 @app.route('/post/<post_id>/delete')
 @login_required
 def delete_post(post_id):
@@ -94,11 +103,12 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        print users 
-        for user in users:
+        if len(user_data.data) < 1:
+            new_user=User(0, username, password)
+            users.append(new_user)
+        for user in user_data.data:
             if user.is_username(username):
                 if user.login_user(username, password):
-                    print("here")
                     load_user(user.id)
                     return render_template("upload.html")
         else:

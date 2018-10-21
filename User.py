@@ -3,12 +3,8 @@ from flask.ext.login import LoginManager, login_user, logout_user, UserMixin, lo
 class User(UserMixin):
     def __init__(self, id, username=None, password=None):
         self.id = id
-        try:
-            self.name = username
-            self.password = password
-        except:
-            pass
-        
+        self.name = str(username)
+        self.password = str(password)
         
     def is_username(self, username):
         if self.name == username:
@@ -17,7 +13,7 @@ class User(UserMixin):
             return False
         
     def login_user(self, username, password):
-        if (self.name == username) and (self.password == password):
+        if (self.name == str(username)) and (self.password == str(password)):
             return True
         else:
             return False
