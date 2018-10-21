@@ -1,11 +1,15 @@
 import json
+import os
 
-
+data_file = "immage_data.json"
 class Data:
     def __init__(self, tag=None):
-        with open("data.json", "r") as f:
-            self.data = json.loads(f.read())
-            self.data.reverse()
+        if not os.path.exists(data_file):
+            self.data = []
+        else:
+            with open(data_file, "r") as f:
+                self.data = json.loads(f.read())
+                self.data.reverse()
         
         max_id = 0
         for post in self.data:
@@ -31,7 +35,7 @@ class Data:
     def add_post(self, post):
         post["id"] = self._id()
         self.data.append(post)
-        with open("data.json", "w+") as f:
+        with open(data_file, "w+") as f:
             f.write(json.dumps(data))
 
     def get_post_by_id(self, id):
@@ -42,7 +46,7 @@ class Data:
     def delete_post_by_id(self, id):
         post = self.get_post_by_id(id)
         self.data.remove(post)
-        with open("data.json", "w+") as f:
+        with open(data_file, "w+") as f:
             f.write(json.dumps(self.data))
     
     def edit_post_id(self, id):
