@@ -1,13 +1,7 @@
 from flask import Flask
 from flask import render_template, redirect, url_for, request
-try:
-    from flask.ext.navigation import Navigation
-except:
-    from flask_navigation import Navigation
-try:
-    from flask.ext.login import LoginManager, login_user, logout_user, UserMixin, login_required
-except:
-    from flask_login import LoginManager, login_user, logout_user, UserMixin, login_required
+from flask_navigation import Navigation
+from flask_login import LoginManager, login_user, logout_user, UserMixin, login_required
 from User import User
 from PageManager import PageManager
 from DatabaseWrapper import Data
@@ -62,7 +56,7 @@ user_data = UserData()
 #users = [User("1", "Me", "Me")]
 page_size = 5
 
-@app.route('/', defaults={'page': 1})
+@app.route('/')
 def main():
     return redirect("https://www.etsy.com/shop/EmilyLandBasics")
 
