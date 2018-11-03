@@ -1,5 +1,14 @@
 <!doctype html>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='home.css') }}">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128594681-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128594681-1');
+</script>
 <div class="topnav">
 	<div class="title">Dyno Unique</div>
     {% for item in nav.top %}
