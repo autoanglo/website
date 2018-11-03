@@ -21,7 +21,7 @@ login_manager.login_view = "login"
 #    return users[0]
 
 nav = Navigation(app)
-nav.Bar('top', [nav.Item('Home', 'home'), nav.Item('Showcase', 'showcase')])
+nav.Bar('top', [nav.Item('Home', 'home'), nav.Item('Showcase', 'showcase'), nav.Item("Shop", r"shop")])
 
 
 # def load_json(tag=None):
@@ -55,10 +55,6 @@ user_data = UserData()
 page_size = 5
 
 @app.route('/', defaults={'page': 1})
-#def main():
-#    return redirect("https://www.etsy.com/shop/EmilyLandBasics")
-
-
 @app.route('/page/<int:page>')
 def home(page): 
     lower_index = page_size * page - page_size
@@ -74,6 +70,10 @@ def showcase(page):
     upper_index = page_size * page
     page_manager = PageManager(data2, page_size, page)
     return render_template("home.html", data=data2[lower_index:upper_index], pages=page_manager)
+
+@app.route("/shop")
+def shop():
+    return redirect("https://www.etsy.com/shop/EmilyLandBasics")
 
 #@app.route('/showcase')
 #def showcase():
