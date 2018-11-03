@@ -2,56 +2,33 @@ from flask import Flask
 from flask import render_template, redirect, url_for, request
 from flask_navigation import Navigation
 from flask_login import LoginManager, login_user, logout_user, UserMixin, login_required
+import json
+
 from User import User
 from PageManager import PageManager
 from DatabaseWrapper import Data
 from UsersDatabaseWrapper import UserData
 
-import json
-
+#### APP Setup ####
 app = Flask(__name__)
 app.config.update(SECRET_KEY = '541')
 
+#### Login Manager Setup ####
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-#@login_manager.user_loader
-#def load_user(user_id):
-#    return users[0]
-
-nav = Navigation(app)
-nav.Bar('top', [nav.Item('Home', 'home'), nav.Item('Showcase', 'showcase'), nav.Item("Shop", r"shop")])
-
-
-# def load_json(tag=None):
-#     with open("data.json", "r") as f:
-#         data = json.loads(f.read())
-#     
-#     result = []
-#     if tag is not None:
-#         for item in data:
-#             if tag in item["tags"]:
-#                 result.append(item)
-#                 return result
-#     else:
-#         return data
-#         
-#     
-# def get_post_by_id(id): 
-#     data = load_json()
-#     for post in data:
-#         if int(post["id"]) == int(id):
-#             return post
-
 @login_manager.user_loader
 def user_loader(userid):
     return user_data.get_user_by_id(userid)
-   
-            
+
+#### Navigation bar setup ####
+nav = Navigation(app)
+nav.Bar('top', [nav.Item('Home', 'home'), nav.Item('Showcase', 'showcase'), nav.Item("Shop", r"shop"), nav.Item("About", "about")])
+
+#### Globals ####
 data = Data()
 user_data = UserData()
-#users = [User("1", "Me", "Me")]
 page_size = 5
 
 @app.route('/', defaults={'page': 1})
@@ -75,18 +52,18 @@ def showcase(page):
 def shop():
     return redirect("https://www.etsy.com/shop/EmilyLandBasics")
 
-#@app.route('/showcase')
-#def showcase():
-#    data = load_json()
-#    return render_template("gallery.html", name="A concept character for a new story.")
+@app.route("/about")
+def about():
+    about = "---- Warning this website is still in development please use the shop link to get to the Etsy store to browse and purchase products. ----Dyno Unique "\
+            "is a climbing gear company based in Oregon specializing in unique and fun chalk bags. All products" \
+            "are hand made at home."
+    return render_template("about.html", about=about)
 
 @app.route('/post/<post_id>')
 def view_post(post_id):
     return render_template("view_post.html", post=data.get_post_by_id(post_id))
 
-
 ##### ADMIN PAGES #####
-
 @app.route('/post/<post_id>/delete')
 @login_required
 def delete_post(post_id):
@@ -124,7 +101,5 @@ def upload():
         post["description"] = request.form["description"]
         post["tags"] = request.form["tags"]
         data.add_post(post)
-        #with open("data.json", "w+") as f:
-        #    f.write(json.dumps(data))
     return render_template("upload.html")
 

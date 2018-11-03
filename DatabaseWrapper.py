@@ -30,7 +30,7 @@ class Data:
             for item in self.data:
                 if tag in item["tags"]:
                     result.append(item)
-                    return result
+            return result
         else:
             return data
     
