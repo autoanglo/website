@@ -45,20 +45,18 @@ nav.Bar('top', [nav.Item('Home', 'home'), nav.Item('Showcase', 'showcase')])
 #             return post
 
 @login_manager.user_loader
-def load_user(userid):
-    return User(userid)
+def user_loader(userid):
+    return user_data.get_user_by_id(userid)
    
-
-
             
 data = Data()
 user_data = UserData()
 #users = [User("1", "Me", "Me")]
 page_size = 5
 
-@app.route('/')
-def main():
-    return redirect("https://www.etsy.com/shop/EmilyLandBasics")
+@app.route('/', defaults={'page': 1})
+#def main():
+#    return redirect("https://www.etsy.com/shop/EmilyLandBasics")
 
 
 @app.route('/page/<int:page>')
@@ -84,7 +82,6 @@ def showcase(page):
 
 @app.route('/post/<post_id>')
 def view_post(post_id):
-    
     return render_template("view_post.html", post=data.get_post_by_id(post_id))
 
 
@@ -105,12 +102,14 @@ def login():
         password = request.form['password']
         if len(user_data.data) < 1:
             new_user=User(0, username, password)
-            users.append(new_user)
+            user_data.add_user(new_user)
         for user in user_data.data:
+            print(user.name)
             if user.is_username(username):
                 if user.login_user(username, password):
-                    load_user(user.id)
-                    return render_template("upload.html")
+                    next = request.args.get('next')
+                    login_user(user, remember=True)
+                    return redirect(next)
         else:
             error = 'Invalid Credentials. Please try again.'
     return render_template('login.html', error=error)
@@ -124,8 +123,8 @@ def upload():
         post["link"] = request.form["link"]
         post["description"] = request.form["description"]
         post["tags"] = request.form["tags"]
-        self.data.add_post(post)
-        with open("data.json", "w+") as f:
-            f.write(json.dumps(data))
+        data.add_post(post)
+        #with open("data.json", "w+") as f:
+        #    f.write(json.dumps(data))
     return render_template("upload.html")
 

@@ -6,6 +6,8 @@ class Data:
     def __init__(self, tag=None):
         if not os.path.exists(data_file):
             self.data = []
+            with open(data_file, "w") as f:
+                f.write(json.dumps(self.data))
         else:
             with open(data_file, "r") as f:
                 self.data = json.loads(f.read())
@@ -20,7 +22,7 @@ class Data:
         
     def _id(self):
         self._cur_id = self._cur_id + 1
-        return seld._cur_id
+        return self._cur_id
     
     def get_posts_by_tag(self, tag):
         result = []
@@ -36,7 +38,7 @@ class Data:
         post["id"] = self._id()
         self.data.append(post)
         with open(data_file, "w+") as f:
-            f.write(json.dumps(data))
+            f.write(json.dumps(self.data))
 
     def get_post_by_id(self, id):
         for post in self.data:
