@@ -54,7 +54,7 @@ def shop():
 
 @app.route("/about")
 def about():
-    about = "---- Warning this website is still in development please use the shop link to get to the Etsy store to browse and purchase products. ----Dyno Unique "\
+    about = "Dyno Unique "\
             "is a climbing gear company based in Oregon specializing in unique and fun chalk bags. All products" \
             "are hand made at home."
     return render_template("about.html", about=about)
