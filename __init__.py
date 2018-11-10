@@ -54,10 +54,7 @@ def shop():
 
 @app.route("/about")
 def about():
-    about = "Dyno Unique "\
-            "is a climbing gear company based in Oregon specializing in unique and fun chalk bags. All products" \
-            "are hand made at home."
-    return render_template("about.html", about=about)
+    return render_template("about.html")
 
 @app.route('/post/<post_id>')
 def view_post(post_id):
