@@ -25,7 +25,7 @@ def user_loader(userid):
 
 #### Navigation bar setup ####
 nav = Navigation(app)
-nav.Bar('top', [nav.Item('Home', 'home'), nav.Item('Showcase', 'showcase'), nav.Item("Shop", r"shop"), nav.Item("About", "about")])
+nav.Bar('top', [nav.Item('Home', 'home'), nav.Item('Showcase', 'showcase'),nav.Item("Chalkbags", "chalkbags"), nav.Item("Shop", r"shop"), nav.Item("About", "about")])
 
 #### Globals ####
 data = Data()
@@ -42,7 +42,11 @@ def home(page):
 @app.route('/showcase/<int:page>')
 def showcase(page): 
     return website.galery_with_tag(page, "showcase")
-    
+
+@app.route('/chalkbags', defaults={'page': 1})
+@app.route('/chalkbags/<int:page>')
+def chalkbags(page): 
+    return website.galery_with_tag(page, "chalkbag")
 
 @app.route("/shop")
 def shop():
