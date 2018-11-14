@@ -8,6 +8,7 @@ from User import User
 from PageManager import PageManager
 from DatabaseWrapper import Data
 from UsersDatabaseWrapper import UserData
+from website import Website
 
 #### APP Setup ####
 app = Flask(__name__)
@@ -30,31 +31,26 @@ nav.Bar('top', [nav.Item('Home', 'home'), nav.Item('Showcase', 'showcase'), nav.
 data = Data()
 user_data = UserData()
 page_size = 5
+website = Website()
 
 @app.route('/', defaults={'page': 1})
 @app.route('/page/<int:page>')
-def home(page): 
-    lower_index = page_size * page - page_size
-    upper_index = page_size * page
-    page_manager = PageManager(data.data, page_size, page)
-    return render_template("home.html", data=data.data[lower_index:upper_index], pages=page_manager)
+def home(page):
+    return website.galery_with_tag(page)
 
 @app.route('/showcase', defaults={'page': 1})
 @app.route('/showcase/<int:page>')
 def showcase(page): 
-    data2 = data.get_posts_by_tag("showcase")
-    lower_index = page_size * page - page_size
-    upper_index = page_size * page
-    page_manager = PageManager(data2, page_size, page)
-    return render_template("home.html", data=data2[lower_index:upper_index], pages=page_manager)
+    return website.galery_with_tag(page, "showcase")
+    
 
 @app.route("/shop")
 def shop():
-    return redirect("https://www.etsy.com/shop/EmilyLandBasics")
+    return website.redirect_to("https://www.etsy.com/shop/EmilyLandBasics")
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    return website.render_template("about.html")
 
 @app.route('/post/<post_id>')
 def view_post(post_id):
@@ -64,26 +60,20 @@ def view_post(post_id):
 @app.route('/post/<post_id>/delete')
 @login_required
 def delete_post(post_id):
-    data.delete_post_by_id(post_id)
-    return_url = request.referrer
-    return redirect("/")
+    website.delete_post(post_id)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+    user = None
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if len(user_data.data) < 1:
-            new_user=User(0, username, password)
-            user_data.add_user(new_user)
-        for user in user_data.data:
-            print(user.name)
-            if user.is_username(username):
-                if user.login_user(username, password):
-                    next = request.args.get('next')
-                    login_user(user, remember=True)
-                    return redirect(next)
+        user = website.login_user(request)
+        if user:
+            next = request.args.get('next')
+            if not next:
+                next = ""
+            login_user(user, remember=True)
+            return redirect(next)
         else:
             error = 'Invalid Credentials. Please try again.'
     return render_template('login.html', error=error)
@@ -92,11 +82,6 @@ def login():
 @login_required
 def upload():
     if request.method == 'POST':
-        post = {}
-        post["title"] = request.form["title"]
-        post["link"] = request.form["link"]
-        post["description"] = request.form["description"]
-        post["tags"] = request.form["tags"]
-        data.add_post(post)
+        return website.upload_post(request)
     return render_template("upload.html")
 
